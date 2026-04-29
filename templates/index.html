@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLite Patterns 🌸</title>
+    <style>
+        :root {
+            --rose: #ffcce6;
+            --bleu: #d0e1ff;
+            --texte: #4a4a4a;
+            --accent: #ff69b4;
+        }
+
+        body {
+            background-color: var(--bleu);
+            background-image: url('https://www.transparenttextures.com/patterns/flowers.png');
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--texte);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            max-width: 800px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 4px solid var(--rose);
+        }
+
+        h1 { text-align: center; color: var(--accent); font-size: 2.5em; text-shadow: 1px 1px 2px white; }
+        
+        .humour-box {
+            background: var(--rose);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 25px;
+            border: 1px dashed var(--accent);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #5a5a5a; }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--bleu);
+            outline: none;
+        }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-submit:hover { transform: scale(1.02); background: #e0559d; }
+
+        .graph-section { margin: 30px 0; border-radius: 20px; overflow: hidden; }
+
+        .history-card {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 8px solid var(--rose);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>SmartLite Patterns 🌸</h1>
+    
+    <div class="humour-box">
+        " {{ message }} "
+    </div>
+
+    <form action="/ajouter" method="POST">
+        <div class="form-grid">
+            <div>
+                <label>Ton Humeur</label>
+                <select name="humeur">
+                    <option value="😊">Heureux 😊</option>
+                    <option value="🤩">En feu 🤩</option>
+                    <option value="😴">Fatigué 😴</option>
+                    <option value="😤">Grogneux 😤</option>
+                    <option value="🧘">Zen 🧘</option>
+                </select>
+            </div>
+            <div>
+                <label>Énergie (1 à 10)</label>
+                <input type="range" name="energie" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
+                <output>5</output>
+            </div>
+            <div>
+                <label>Sommeil (Heures)</label>
+                <input type="number" step="0.5" name="sommeil" placeholder="ex: 7.5" required>
+            </div>
+            <div>
+                <label>Activité Principale</label>
+                <select name="activite">
+                    <option value="Travail">Travail 💻</option>
+                    <option value="Sport">Sport 🏃‍♀️</option>
+                    <option value="Repos">Repos ☕</option>
+                    <option value="Social">Social 🥂</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Enregistrer mon état 💖</button>
+        </div>
+    </form>
+
+    <div class="graph-section">
+        {{ graph|safe }}
+    </div>
+
+    <h3>Historique de tes Patterns</h3>
+    {% for entry in entries[:7] %}
+    <div class="history-card">
+        <div>
+            <span style="font-size: 1.5em;">{{ entry.humeur }}</span>
+            <strong>{{ entry.date.strftime('%d %b') }}</strong>
+        </div>
+        <div>⚡ {{ entry.energie }}/10</div>
+        <div>💤 {{ entry.sommeil }}h</div>
+        <div style="color: var(--accent);">#{{ entry.activite }}</div>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
